@@ -162,7 +162,7 @@ installbbrplus(){
 	detele_kernel
 	BBR_grub
 	echo -e "${Tip} ${Red_font_prefix}请检查上面是否有内核信息，无内核千万别重启${Font_color_suffix}"
-	echo -e "${Tip} ${Red_font_prefix}rescue不是正常内核，要排除这个${Font_color_suffix}"
+	#echo -e "${Tip} ${Red_font_prefix}rescue不是正常内核，要排除这个${Font_color_suffix}"
 	echo -e "${Tip} 重启VPS后，请重新运行脚本开启${Red_font_prefix}BBRplus${Font_color_suffix}"
 	stty erase '^H' && read -p "需要重启VPS后，才能开启BBRplus，是否现在重启 ? [Y/n] :" yn
 	[ -z "${yn}" ] && yn="y"
@@ -424,9 +424,11 @@ check_sys_bbrplusnew() {
 }
 
 installbbrplusnew() {
-  github_ver_plus=$(curl -s https://api.github.com/repos/UJX6N/bbrplus-5.10/releases | grep /bbrplus-5.10/releases/tag/ | head -1 | awk -F "[/]" '{print $8}' | awk -F "[\"]" '{print $1}')
-  github_ver_plus_num=$(curl -s https://api.github.com/repos/UJX6N/bbrplus-5.10/releases | grep /bbrplus-5.10/releases/tag/ | head -1 | awk -F "[/]" '{print $8}' | awk -F "[\"]" '{print $1}' | awk -F "[-]" '{print $1}')
-  echo -e "获取的UJX6N的bbrplus-5.10版本号为:${github_ver_plus}"
+  github_ver_plus=$(curl -s https://api.github.com/repos/UJX6N/bbrplus-5.19/releases | grep /bbrplus-5.19/releases/tag/ | head -1 | awk -F "[/]" '{print $8}' | awk -F "[\"]" '{print $1}')
+  github_ver_plus_num=$(curl -s https://api.github.com/repos/UJX6N/bbrplus-5.19/releases | grep /bbrplus-5.19/releases/tag/ | head -1 | awk -F "[/]" '{print $8}' | awk -F "[\"]" '{print $1}' | awk -F "[-]" '{print $1}')
+  #echo -e "获取的UJX6N的bbrplus-5.19版本号为:${github_ver_plus}"
+  #echo -e "如果下载地址出错，可能当前正在更新，超过半天还是出错请反馈，大陆自行解决污染问题"
+  #echo -e "安装失败这边反馈，内核问题给UJX6N反馈"
   # kernel_version=$github_ver_plus
 
   bit=$(uname -m)
@@ -441,10 +443,11 @@ installbbrplusnew() {
         #github_tag=$(curl -s 'https://api.github.com/repos/ylx2016/kernel/releases' | grep 'Centos_Kernel' | grep '_latest_bbrplus_' | head -n 1 | awk -F '"' '{print $4}' | awk -F '[/]' '{print $8}')
         #github_ver=$(curl -s 'https://api.github.com/repos/ylx2016/kernel/releases' | grep ${github_tag} | grep 'rpm' | grep 'headers' | awk -F '"' '{print $4}' | awk -F '[/]' '{print $9}' | awk -F '[-]' '{print $3}' | awk -F '[_]' '{print $1}')
         #echo -e "获取的版本号为:${github_ver}"
-        kernel_version=${github_ver_plus_num}_bbrplus
+        kernel_version=${github_ver_plus_num}
         detele_kernel_head
-        headurl=$(curl -s 'https://api.github.com/repos/UJX6N/bbrplus-5.10/releases' | grep ${github_ver_plus} | grep 'rpm' | grep 'headers' | grep 'el7' | awk -F '"' '{print $4}')
-        imgurl=$(curl -s 'https://api.github.com/repos/UJX6N/bbrplus-5.10/releases' | grep ${github_ver_plus} | grep 'rpm' | grep -v 'devel' | grep -v 'headers' | grep -v 'Source' | grep 'el7' | awk -F '"' '{print $4}')
+        headurl=$(curl -s 'https://api.github.com/repos/UJX6N/bbrplus-5.19/releases' | grep ${github_ver_plus} | grep 'rpm' | grep 'headers' | grep 'el7' | awk -F '"' '{print $4}')
+        imgurl=$(curl -s 'https://api.github.com/repos/UJX6N/bbrplus-5.19/releases' | grep ${github_ver_plus} | grep 'rpm' | grep -v 'devel' | grep -v 'headers' | grep -v 'Source' | grep 'el7' | awk -F '"' '{print $4}')
+
         echo -e "正在检查headers下载连接...."
         checkurl $headurl
         echo -e "正在检查内核下载连接...."
@@ -462,10 +465,11 @@ installbbrplusnew() {
         #github_tag=$(curl -s 'https://api.github.com/repos/ylx2016/kernel/releases' | grep 'Centos_Kernel' | grep '_latest_bbrplus_' | head -n 1 | awk -F '"' '{print $4}' | awk -F '[/]' '{print $8}')
         #github_ver=$(curl -s 'https://api.github.com/repos/ylx2016/kernel/releases' | grep ${github_tag} | grep 'rpm' | grep 'headers' | awk -F '"' '{print $4}' | awk -F '[/]' '{print $9}' | awk -F '[-]' '{print $3}' | awk -F '[_]' '{print $1}')
         #echo -e "获取的版本号为:${github_ver}"
-        kernel_version=${github_ver_plus_num}_bbrplus
+        kernel_version=${github_ver_plus_num}
         detele_kernel_head
-        headurl=$(curl -s 'https://api.github.com/repos/UJX6N/bbrplus-5.10/releases' | grep ${github_ver_plus} | grep 'rpm' | grep 'headers' | grep 'el8' | awk -F '"' '{print $4}')
-        imgurl=$(curl -s 'https://api.github.com/repos/UJX6N/bbrplus-5.10/releases' | grep ${github_ver_plus} | grep 'rpm' | grep -v 'devel' | grep -v 'headers' | grep -v 'Source' | grep 'el8' | awk -F '"' '{print $4}')
+        headurl=$(curl -s 'https://api.github.com/repos/UJX6N/bbrplus-5.19/releases' | grep ${github_ver_plus} | grep 'rpm' | grep 'headers' | grep 'el8' | awk -F '"' '{print $4}')
+        imgurl=$(curl -s 'https://api.github.com/repos/UJX6N/bbrplus-5.19/releases' | grep ${github_ver_plus} | grep 'rpm' | grep -v 'devel' | grep -v 'headers' | grep -v 'Source' | grep 'el8' | awk -F '"' '{print $4}')
+
         echo -e "正在检查headers下载连接...."
         checkurl $headurl
         echo -e "正在检查内核下载连接...."
@@ -485,8 +489,9 @@ installbbrplusnew() {
       #echo -e "获取的版本号为:${github_ver}"
       kernel_version=${github_ver_plus_num}-bbrplus
       detele_kernel_head
-      headurl=$(curl -s 'https://api.github.com/repos/UJX6N/bbrplus-5.10/releases' | grep ${github_ver_plus} | grep 'https' | grep 'amd64.deb' | grep 'headers' | awk -F '"' '{print $4}')
-      imgurl=$(curl -s 'https://api.github.com/repos/UJX6N/bbrplus-5.10/releases' | grep ${github_ver_plus} | grep 'https' | grep 'amd64.deb' | grep 'image' | awk -F '"' '{print $4}')
+      headurl=$(curl -s 'https://api.github.com/repos/UJX6N/bbrplus-5.19/releases' | grep ${github_ver_plus} | grep 'https' | grep 'amd64.deb' | grep 'headers' | awk -F '"' '{print $4}')
+      imgurl=$(curl -s 'https://api.github.com/repos/UJX6N/bbrplus-5.19/releases' | grep ${github_ver_plus} | grep 'https' | grep 'amd64.deb' | grep 'image' | awk -F '"' '{print $4}')
+
       echo -e "正在检查headers下载连接...."
       checkurl $headurl
       echo -e "正在检查内核下载连接...."
@@ -501,8 +506,9 @@ installbbrplusnew() {
       #echo -e "获取的版本号为:${github_ver}"
       kernel_version=${github_ver_plus_num}-bbrplus
       detele_kernel_head
-      headurl=$(curl -s 'https://api.github.com/repos/UJX6N/bbrplus-5.10/releases' | grep ${github_ver_plus} | grep 'https' | grep 'arm64.deb' | grep 'headers' | awk -F '"' '{print $4}')
-      imgurl=$(curl -s 'https://api.github.com/repos/UJX6N/bbrplus-5.10/releases' | grep ${github_ver_plus} | grep 'https' | grep 'arm64.deb' | grep 'image' | awk -F '"' '{print $4}')
+      headurl=$(curl -s 'https://api.github.com/repos/UJX6N/bbrplus-5.19/releases' | grep ${github_ver_plus} | grep 'https' | grep 'arm64.deb' | grep 'headers' | awk -F '"' '{print $4}')
+      imgurl=$(curl -s 'https://api.github.com/repos/UJX6N/bbrplus-5.19/releases' | grep ${github_ver_plus} | grep 'https' | grep 'arm64.deb' | grep 'image' | awk -F '"' '{print $4}')
+
       echo -e "正在检查headers下载连接...."
       checkurl $headurl
       echo -e "正在检查内核下载连接...."
