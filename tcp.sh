@@ -129,36 +129,57 @@ installbbr() {
 
 #安装BBRplus内核 4.14.129
 installbbrplus(){
-	kernel_version="4.14.160-bbrplus"
-	bit=`uname -m`
-	rm -rf bbrplus
-	mkdir bbrplus && cd bbrplus
-	if [[ "${release}" == "centos" ]]; then
-		if [[ ${version} = "7" ]]; then
-			if [[ ${bit} = "x86_64" ]]; then
-				wget -N -O kernel-headers-c7.rpm https://github.com/cx9208/Linux-NetSpeed/raw/master/bbrplus/centos/7/kernel-headers-4.14.129-bbrplus.rpm
-				wget -N -O kernel-c7.rpm https://github.com/cx9208/Linux-NetSpeed/raw/master/bbrplus/centos/7/kernel-4.14.129-bbrplus.rpm
-				
-				yum install -y kernel-c7.rpm
-				yum install -y kernel-headers-c7.rpm
-				
-				kernel_version="4.14.129_bbrplus"
-			else
-					echo -e "${Error} 还在用32位内核，别再见了 !" && exit 1
-			fi
-		fi	
-		
-	elif [[ "${release}" == "debian" || "${release}" == "ubuntu" ]]; then
-		wget -N -O linux-headers.deb https://github.com/cx9208/Linux-NetSpeed/raw/master/bbrplus/debian-ubuntu/x64/linux-headers-4.14.129-bbrplus.deb
-		wget -N -O linux-image.deb https://github.com/cx9208/Linux-NetSpeed/raw/master/bbrplus/debian-ubuntu/x64/linux-image-4.14.129-bbrplus.deb
-		
-		dpkg -i linux-image.deb
-		dpkg -i linux-headers.deb
-			
-		kernel_version="4.14.129-bbrplus"
-	fi
-	
-	cd .. && rm -rf bbrplus
+  kernel_version="4.14.160-bbrplus"
+  bit=$(uname -m)
+  rm -rf bbrplus
+  mkdir bbrplus && cd bbrplus || exit
+  if [[ "${release}" == "centos" ]]; then
+    if [[ ${version} == "7" ]]; then
+      if [[ ${bit} == "x86_64" ]]; then
+        kernel_version="4.14.129_bbrplus"
+        detele_kernel_head
+        headurl=https://github.com/cx9208/Linux-NetSpeed/raw/master/bbrplus/centos/7/kernel-headers-4.14.129-bbrplus.rpm
+        imgurl=https://github.com/cx9208/Linux-NetSpeed/raw/master/bbrplus/centos/7/kernel-4.14.129-bbrplus.rpm
+
+        headurl=$(check_cn $headurl)
+        imgurl=$(check_cn $imgurl)
+        echo -e "正在检查headers下载连接...."
+        checkurl $headurl
+        echo -e "正在检查内核下载连接...."
+        checkurl $imgurl
+        wget -N -O kernel-headers-c7.rpm $headurl
+        wget -N -O kernel-c7.rpm $imgurl
+        yum install -y kernel-c7.rpm
+        yum install -y kernel-headers-c7.rpm
+      else
+        echo -e "${Error} 不支持x86_64以外的系统 !" && exit 1
+      fi
+    fi
+
+  elif [[ "${release}" == "debian" || "${release}" == "ubuntu" ]]; then
+    if [[ ${bit} == "x86_64" ]]; then
+      kernel_version="4.14.129-bbrplus"
+      detele_kernel_head
+      headurl=https://github.com/cx9208/Linux-NetSpeed/raw/master/bbrplus/debian-ubuntu/x64/linux-headers-4.14.129-bbrplus.deb
+      imgurl=https://github.com/cx9208/Linux-NetSpeed/raw/master/bbrplus/debian-ubuntu/x64/linux-image-4.14.129-bbrplus.deb
+
+      headurl=$(check_cn $headurl)
+      imgurl=$(check_cn $imgurl)
+      echo -e "正在检查headers下载连接...."
+      checkurl $headurl
+      echo -e "正在检查内核下载连接...."
+      checkurl $imgurl
+      wget -N -O linux-headers.deb $headurl
+      wget -N -O linux-image.deb $imgurl
+
+      dpkg -i linux-image.deb
+      dpkg -i linux-headers.deb
+    else
+      echo -e "${Error} 不支持x86_64以外的系统 !" && exit 1
+    fi
+  fi
+
+  cd .. && rm -rf bbrplus
 	detele_kernel
 	BBR_grub
 	echo -e "${Tip} ${Red_font_prefix}请检查上面是否有内核信息，无内核千万别重启${Font_color_suffix}"
