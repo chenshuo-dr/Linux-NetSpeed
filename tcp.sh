@@ -1096,7 +1096,7 @@ check_sys_bbr(){
 			echo -e "${Error} BBR内核不支持当前系统 ${release} ${version} ${bit} !" && exit 1
 		fi
 	elif [[ "${release}" == "debian" ]]; then
-		if [[ ${version} = "8" || ${version} = "9" || ${version} = "10" ]]; then
+		if [[ ${version} = "8" || ${version} = "9" || ${version} = "10" || ${version} = "11" ]]; then
 			installbbr
 		else
 			echo -e "${Error} BBR内核不支持当前系统 ${release} ${version} ${bit} !" && exit 1
